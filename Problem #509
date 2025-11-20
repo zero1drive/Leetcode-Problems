@@ -1,0 +1,8 @@
+class Solution {
+public:
+    int fib(int n) {
+        if (n == 0) return 0; // Base case 1: F(0) = 0 (Fibonacci definition)
+        if (n == 1) return 1; // Base case 2: F(1) = 1
+        return fib(n - 1) + fib(n - 2); // Recursive Case: F(n) = F(n - 1) + F(n - 2), calls the function again on the two previous numbers and adds them
+    }
+};
