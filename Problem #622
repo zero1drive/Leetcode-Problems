@@ -1,0 +1,58 @@
+class MyCircularQueue {
+
+public:
+    // Initialize queue with capacity k
+    MyCircularQueue(int k) {
+        capacity = k;
+        q = vector<int>(k);
+        front = 0;      // Front starts at index 0
+        size = 0;       // Queue starts empty
+    }
+
+    // Insert value into queue
+    bool enQueue(int value) {
+        if (isFull()) return false; // Check if full
+        int rear_index = (front + size) % capacity; // Rear position = front + size (mod capacity)
+        q[rear_index] = value;
+        size++;         // One more element added
+        return true;
+    }
+
+    // Remove element from queue
+    bool deQueue() {
+        if (isEmpty()) return false; // Check if empty
+        front = (front + 1) % capacity; // Move front forward circularly using %
+        size--;         // One element removed
+        return true;
+    }
+
+    // Get the front item
+    int Front() {
+        if (isEmpty()) return -1; // Check if empty
+        return q[front];    // Front always points to first element
+    }
+
+    // Get the last item
+    int Rear() {
+        if (isEmpty()) return -1;
+        int rear_index = (front + size - 1) % capacity; // Rear index = front + size - 1 (mod capacity)
+        return q[rear_index];
+    }
+
+    // Check if queue is empty
+    bool isEmpty() {
+        return size == 0;
+    }
+
+    // Check if queue is full
+    bool isFull() {
+        return size == capacity;
+    }
+
+    private:
+    int front;          // Points to the front element of the queue
+    int size;           // Current number of elements
+    int capacity;       // Maximum allowed elements
+    vector<int> q;      // Array used to store the queue elements
+
+};
