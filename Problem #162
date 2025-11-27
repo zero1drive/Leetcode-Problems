@@ -1,0 +1,28 @@
+class Solution {
+public:
+    int findPeakElement(vector<int>& nums) {
+        // Initialize binary search boundaries
+        int left = 0;  // Start with the leftmost index of the array
+        int right = nums.size() - 1;  // Start with the rightmost index of the array
+
+        // Binary search for the peak element
+        while (left < right) {
+            // Calculate middle index (equivalent to (left + right) / 2)
+            int mid = left + (right - left) / 2;  // This avoids overflow
+
+            // If mid element is greater than its right neighbor,
+            // then the peak must be in the left half (including mid)
+            if (nums[mid] > nums[mid + 1]) {
+                right = mid;  // Narrow down the search to the left half (including mid)
+            } 
+            // Otherwise, the peak must be in the right half
+            // (excluding mid since mid < mid+1)
+            else {
+                left = mid + 1;  // Narrow down the search to the right half (excluding mid)
+            }
+        }
+
+        // When left == right, we've found a peak element
+        return left;  // This will return the index of the peak element
+    }
+};
