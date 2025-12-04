@@ -1,28 +1,35 @@
 class Solution {
 public:
     int findPeakElement(vector<int>& nums) {
-        // Initialize binary search boundaries
-        int left = 0;  // Start with the leftmost index of the array
-        int right = nums.size() - 1;  // Start with the rightmost index of the array
+        // We will use binary search to find a peak.
+        // left starts at the beginning of the array
+        int left = 0;
+        // right starts at the end of the array
+        int right = nums.size() - 1;
 
-        // Binary search for the peak element
+        // Keep searching while there is more than one element in the range
         while (left < right) {
-            // Calculate middle index (equivalent to (left + right) / 2)
-            int mid = left + (right - left) / 2;  // This avoids overflow
+            // Find the middle index
+            int mid = left + (right - left) / 2;
 
-            // If mid element is greater than its right neighbor,
-            // then the peak must be in the left half (including mid)
+            // Check the direction of the "slope":
+            // If nums[mid] > nums[mid + 1], it means the slope is going DOWN.
+            // A peak MUST be on the left side (including mid),
+            // because we are already going down from a higher point.
             if (nums[mid] > nums[mid + 1]) {
-                right = mid;  // Narrow down the search to the left half (including mid)
-            } 
-            // Otherwise, the peak must be in the right half
-            // (excluding mid since mid < mid+1)
+                // Move the right pointer to mid
+                right = mid;
+            }
+            // Otherwise, nums[mid] < nums[mid + 1], meaning the slope is going UP.
+            // If the slope is going up, a peak MUST be on the right side.
             else {
-                left = mid + 1;  // Narrow down the search to the right half (excluding mid)
+                // Move left pointer to mid + 1 to search the right half
+                left = mid + 1;
             }
         }
 
-        // When left == right, we've found a peak element
-        return left;  // This will return the index of the peak element
+        // When left == right, that position is a peak.
+        // We return the index.
+        return left;
     }
 };
