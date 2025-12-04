@@ -1,0 +1,95 @@
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
+
+class Solution {
+public:
+    ListNode* sortList(ListNode* head) {
+        // Get total length of the list
+        const int length = getLength(head);
+        
+        // Sentinel node to simplify edge cases
+        ListNode sentinel(0, head);
+        
+        // Bottom-up merge sort: start with size 1, double each iteration
+        for (int k = 1; k < length; k *= 2) {
+            ListNode* curr = sentinel.next;  // Start of unsorted portion
+            ListNode* tail = &sentinel;       // End of sorted portion
+            
+            // Process all pairs of sublists of size k
+            while (curr != nullptr) {
+                // Split into two sublists of size k
+                ListNode* l = curr;
+                ListNode* r = split(l, k);      // First sublist ends, second starts
+                curr = split(r, k);              // Second sublist ends, next pair starts
+                
+                // Merge the two sublists
+                auto [mergedHead, mergedTail] = merge(l, r);
+                
+                // Attach merged result to the main list
+                tail->next = mergedHead;
+                tail = mergedTail;
+            }
+        }
+        
+        return dummy.next;
+    }
+    
+private:
+    // Count the number of nodes in the list
+    int getLength(ListNode* head) {
+        int length = 0;
+        for (ListNode* curr = head; curr; curr = curr->next)
+            ++length;
+        return length;
+    }
+    
+    // Split the list after k nodes and return the rest
+    // Returns pointer to the (k+1)th node
+    ListNode* split(ListNode* head, int k) {
+        // Move k-1 steps forward
+        while (--k && head)
+            head = head->next;
+        
+        // Save the rest of the list
+        ListNode* rest = head ? head->next : nullptr;
+        
+        // Cut the connection
+        if (head != nullptr)
+            head->next = nullptr;
+        
+        return rest;
+    }
+    
+    // Merge two sorted lists
+    // Returns pair of {head, tail} of the merged list
+    pair<ListNode*, ListNode*> merge(ListNode* l1, ListNode* l2) {
+        ListNode dummy(0);
+        ListNode* tail = &dummy;
+        
+        // Compare and merge nodes
+        while (l1 && l2) {
+            if (l1->val > l2->val)
+                swap(l1, l2);
+            tail->next = l1;
+            l1 = l1->next;
+            tail = tail->next;
+        }
+        
+        // Attach remaining nodes
+        tail->next = l1 ? l1 : l2;
+        
+        // Find the actual tail of merged list
+        while (tail->next != nullptr)
+            tail = tail->next;
+        
+        return {dummy.next, tail};
+    }
+};
