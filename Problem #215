@@ -1,0 +1,25 @@
+class Solution {
+public:
+    int findKthLargest(vector<int>& nums, int k) {
+        // Min-heap (keeps smallest element on top)
+        priority_queue<int, vector<int>, greater<int>> minHeap;
+
+        // Loop through the array using a normal for loop
+        for (int i = 0; i < nums.size(); i++) {
+
+            // Push current number
+            // Then the heap rearranges itself so the smallest number stays on top
+            minHeap.push(nums[i]);
+
+            // If heap has more than k elements,
+            // remove the smallest one
+            if (minHeap.size() > k) {
+                minHeap.pop();
+            }
+        }
+
+        // After processing all numbers,
+        // the top of the min-heap is the k-th largest element
+        return minHeap.top();
+    }
+};
